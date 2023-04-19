@@ -97,7 +97,7 @@ class student:
         course_label.grid(row=0,column=2,padx=10,sticky=W)
 
         course_combo = ttk.Combobox(left_in_frame,textvariable=self.var_course,font=("time new raman",12,"bold"),state="readonly",width=17)
-        course_combo["values"]=("Select Course","fe","se","te","be")
+        course_combo["values"]=("Select Course","FE","SE","TE","BE")
         course_combo.current(0) 
         course_combo.grid(row=0,column=3,padx=2,pady=10,sticky=W)
 
@@ -231,7 +231,7 @@ class student:
         btn_frame1.place(x=2,y=230,width=685,height=30)
 
         #take photo button
-        take_photo_btn=Button(btn_frame1,text="TAKE PHOTO",font=("time new raman",12,"bold"),bg="black",fg="orange",width=35)
+        take_photo_btn=Button(btn_frame1,command=self.generate_dataset,text="TAKE PHOTO",font=("time new raman",12,"bold"),bg="black",fg="orange",width=35)
         take_photo_btn.grid(row=1,column=1,)
 
         #update photo button
@@ -349,8 +349,8 @@ class student:
                                                                                                                 self.var_teacher.get(),
                                                                                                                 self.var_radio1.get()
                                                                                                                     
-                                                                                                             ))
-                conn.commit()
+                                                                                                        ))
+                conn.commit() 
                 self.fatch_data()
                 conn.close()
                 messagebox.showinfo("Success" ,"SUCCESSFULLY" , parent =self.root)
@@ -406,7 +406,7 @@ class student:
                 if update>0:
                     conn=mysql.connector.connect(host="localhost" ,username="root" ,password="student" ,database="face_recognizer")
                     my_cursor=conn.cursor()
-                    my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Semester=%s,Division=%s,Roll=%s,Gender=%s,Dob=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,PhotoSample=%s where student_id=%s",(
+                    my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Semester=%s.Name=%s,Division=%s,Roll=%s,Gender=%s,Dob=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,PhotoSample=%s where student_id=%s",(
                                                                                                                                                                                     self.var_dep.get(),
                                                                                                                                                                                     self.var_course.get(),
                                                                                                                                                                                     self.var_year.get(),
@@ -458,38 +458,98 @@ class student:
 
     #================Reset=======================
     def reset_data(self):
-        self.var_dep.set("Select Department"),
-        self.var_course.set("Select Course"),
-        self.var_year.set("Select Year"),
-        self.var_semester.set("Select Semester"),
-        self.va_std_id.set(""),
-        self.var_std_name.set("Select Name"),
-        self.var_div.set("Select Division"),
-        self.var_roll.set(""),
-        self.var_gender.set("Select Gender"),
-        self.var_dob.set("Select DOB"),
-        self.var_email.set("Select Email"),
-        self.var_phone.set("Select Phone"),
-        self.var_address.set("Select Address"),
-        self.var_teacher.set("Select Teacher"),
+        self.var_dep.set("Select Department")
+        self.var_course.set("Select Course")
+        self.var_year.set("Select Year")
+        self.var_semester.set("Select Semester")
+        self.va_std_id.set("")
+        self.var_std_name.set("")
+        self.var_div.set("")
+        self.var_roll.set("")
+        self.var_gender.set("")
+        self.var_dob.set("")
+        self.var_email.set("")
+        self.var_phone.set("")
+        self.var_address.set("")
+        self.var_teacher.set("")
         self.var_radio1.set("")
+
+#===============Take Photo===================================
+    def generate_dataset(self):
+        if self.var_dep.get()=="Select Department" or self.var_std_name.get()=="" or self.va_std_id.get()=="":
+            messagebox.showerror("Error","All Fields are required" ,parent=self.root)
+        else:
+            try:
+                conn=mysql.connector.connect(host="localhost" ,username="root" ,password="student" ,database="face_recognizer")
+                my_cursor=conn.cursor()
+                my_cursor.execute("select * from student")
+                myresult=my_cursor.fetchall()
+                id=0
+                for x in myresult:
+                    id+1
+                my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Semester=%s,Name=%s,Division=%s,Roll=%s,Gender=%s,Dob=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,PhotoSample=%s where student_id=%s",(
+                                                                                                                                                                                    self.var_dep.get(),
+                                                                                                                                                                                    self.var_course.get(),
+                                                                                                                                                                                    self.var_year.get(),
+                                                                                                                                                                                    self.var_semester.get(),
+                                                                                                                                                                                    self.var_std_name.get(),
+                                                                                                                                                                                    self.var_div.get(),
+                                                                                                                                                                                    self.var_roll.get(),
+                                                                                                                                                                                    self.var_gender.get(),
+                                                                                                                                                                                    self.var_dob.get(),
+                                                                                                                                                                                    self.var_email.get(),
+                                                                                                                                                                                    self.var_phone.get(),
+                                                                                                                                                                                    self.var_address.get(),
+                                                                                                                                                                                    self.var_teacher.get(),
+                                                                                                                                                                                    self.var_radio1.get(),
+                                                                                                                                                                                    self.va_std_id.get()==id+1
+                                                                                                                                                                            ))
+                conn.commit()
+                self.fatch_data()
+                self.reset_data()
+                conn.close()
+            
+
+#===============load predifine data on face detection on opencv==============
+           
+                face_classifier=cv2.CascadeClassifier("tempCodeRunnerFile.xml")
+
+                def face_cropped(img):
+                    gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                    faces=face_classifier.detectMultiScale(gray,1,3,5)
+
+                    for (x,y,w,h) in faces:
+                        face_cropped=img[y:y+h,x:x+w]
+                        return face_cropped
+                    
+                cap=cv2.VideoCapture(0)
+                img_id=0
+                while True:
+                    ret,my_frame=cap.read()
+                    if face_cropped(my_frame) is not None:
+                        img_id+=1
+                        face=cv2.resize(face_cropped(my_frame),(450,450))
+                        face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
+                        file_name_path="data/user."+str(id)+"."+str(img_id)+".jpg"
+                        cv2.imwrite(file_name_path,face)
+                        cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                        cv2.imshow("cropped face",face)
+
+                    if cv2.waitKey(1)==13 or int(img_id)==100:
+                        break
+                    cap.release()
+                    cv2.destroyAllWindows()
+                    messagebox.showinfo("Result","Genreting DataSet Complete!!!")
+                
+            except Exception as es:
+                 messagebox.showerror("Error",f"Due to :{str(es)}",parent=self.root)
 
 
 
 
 
         
-
-
     
-           
-
-
-
-
-
-
-
 
 if __name__=="__main__":
     root=Tk()
