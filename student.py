@@ -326,19 +326,19 @@ class student:
     #==============Function Decleartion===========================
 
     def add_data(self):
-        if self.var_dep.get()=="Select Department" or self.var_std_name.get()=="" or self.va_std_id.get()=="":
+        if self.var_dep.get()=="" or self.var_name.get()=="" or self.va_std_id.get()=="":
             messagebox.showerror("Error","All Fields are required" ,parent=self.root)
         else:
             try:
                 conn=mysql.connector.connect(host="localhost" ,username="root" ,password="student" ,database="face_recognizer")
                 my_cursor=conn.cursor()
-                my_cursor.execute("inster into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
+                my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
                                                                                                                 self.var_dep.get(),
                                                                                                                 self.var_course.get(),
                                                                                                                 self.var_year.get(),
                                                                                                                 self.var_semester.get(),
                                                                                                                 self.va_std_id.get(),
-                                                                                                                self.var_std_name.get(),
+                                                                                                                self.var_name.get(),
                                                                                                                 self.var_div.get(),
                                                                                                                 self.var_roll.get(),
                                                                                                                 self.var_gender.get(),
@@ -348,15 +348,16 @@ class student:
                                                                                                                 self.var_address.get(),
                                                                                                                 self.var_teacher.get(),
                                                                                                                 self.var_radio1.get()
-                                                                                                                    
-                                                                                                        ))
+                                                                                                                        
+                                                                                                            ))
                 conn.commit() 
                 self.fatch_data()
                 conn.close()
                 messagebox.showinfo("Success" ,"SUCCESSFULLY" , parent =self.root)
             except Exception as es:
-                messagebox.showerror("Error",f"Due to :{str(es)}",parent =self.root)
+                messagebox.showerror("Error",f"Due to :{str(es)}",parent=self.root)
 
+           
 
     #==============fetch data==============================================
 
@@ -385,7 +386,7 @@ class student:
         self.var_year.set(data[2]),
         self.var_semester.set(data[3]),
         self.va_std_id.set(data[4]),
-        self.var_std_name.set(data[5]),
+        self.var_name.set(data[5]),
         self.var_div.set(data[6]),
         self.var_roll.set(data[7]),
         self.var_gender.set(data[8]),
@@ -398,7 +399,7 @@ class student:
 
 #=============Update data=====================================
     def update_data(self):
-        if self.var_dep.get()=="Select Department" or self.var_std_name.get()=="" or self.va_std_id.get()=="":
+        if self.var_dep.get()=="" or self.var_name.get()=="" or self.va_std_id.get()=="":
             messagebox.showerror("Error","All Fields are required" ,parent=self.root)
         else:
             try:
@@ -411,7 +412,7 @@ class student:
                                                                                                                                                                                     self.var_course.get(),
                                                                                                                                                                                     self.var_year.get(),
                                                                                                                                                                                     self.var_semester.get(),
-                                                                                                                                                                                    self.var_std_name.get(),
+                                                                                                                                                                                    self.var_name.get(),
                                                                                                                                                                                     self.var_div.get(),
                                                                                                                                                                                     self.var_roll.get(),
                                                                                                                                                                                     self.var_gender.get(),
@@ -426,10 +427,10 @@ class student:
                 else: 
                     if not update:
                         return
-                messagebox.showinfo("Success" ,"student details Upadte Successfully " ,parent=self.root)
                 conn.commit()
                 self.fatch_data()
                 conn.close()
+                messagebox.showinfo("Success" ,"student details Upadte Successfully " ,parent=self.root)
             except Exception as es:
                 messagebox.showerror("Error",f"Due to :{str(es)}",parent=self.root)
 
@@ -444,7 +445,7 @@ class student:
                     conn=mysql.connector.connect(host="localhost" ,username="root" ,password="student" ,database="face_recognizer")
                     my_cursor=conn.cursor()
                     sql="delete from student where student_id=%s"
-                    val=(self.va_std_id.get(),)
+                    val=(self.va_std_id.get())
                     my_cursor.execute(sql,val)
                 else:
                     if not delete:
@@ -463,7 +464,7 @@ class student:
         self.var_year.set("Select Year")
         self.var_semester.set("Select Semester")
         self.va_std_id.set("")
-        self.var_std_name.set("")
+        self.var_name.set("")
         self.var_div.set("")
         self.var_roll.set("")
         self.var_gender.set("")
@@ -476,7 +477,7 @@ class student:
 
 #===============Take Photo===================================
     def generate_dataset(self):
-        if self.var_dep.get()=="Select Department" or self.var_std_name.get()=="" or self.va_std_id.get()=="":
+        if self.var_dep.get()=="" or self.var_name.get()=="" or self.va_std_id.get()=="":
             messagebox.showerror("Error","All Fields are required" ,parent=self.root)
         else:
             try:
@@ -492,7 +493,7 @@ class student:
                                                                                                                                                                                     self.var_course.get(),
                                                                                                                                                                                     self.var_year.get(),
                                                                                                                                                                                     self.var_semester.get(),
-                                                                                                                                                                                    self.var_std_name.get(),
+                                                                                                                                                                                    self.var_name.get(),
                                                                                                                                                                                     self.var_div.get(),
                                                                                                                                                                                     self.var_roll.get(),
                                                                                                                                                                                     self.var_gender.get(),
@@ -512,11 +513,11 @@ class student:
 
 #===============load predifine data on face detection on opencv==============
            
-                face_classifier=cv2.CascadeClassifier("tempCodeRunnerFile.xml")
+                face_classifier=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
                 def face_cropped(img):
                     gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-                    faces=face_classifier.detectMultiScale(gray,1,3,5)
+                    faces=face_classifier.detectMultiScale(gray,1.3,5)
 
                     for (x,y,w,h) in faces:
                         face_cropped=img[y:y+h,x:x+w]
@@ -530,16 +531,17 @@ class student:
                         img_id+=1
                         face=cv2.resize(face_cropped(my_frame),(450,450))
                         face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                        file_name_path="data/user."+str(id)+"."+str(img_id)+".jpg"
+                        file_name_path="data/user."+str(self.va_std_id)+"."+str(img_id)+".jpg"
                         cv2.imwrite(file_name_path,face)
                         cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
-                        cv2.imshow("cropped face",face)
+                        cv2.imshow("Cropped Face",face)
 
                     if cv2.waitKey(1)==13 or int(img_id)==100:
                         break
-                    cap.release()
-                    cv2.destroyAllWindows()
-                    messagebox.showinfo("Result","Genreting DataSet Complete!!!")
+                cap.release()
+                cv2.destroyAllWindows()
+
+                messagebox.showinfo("Result","Genreting DataSet Complete!!!")
                 
             except Exception as es:
                  messagebox.showerror("Error",f"Due to :{str(es)}",parent=self.root)
