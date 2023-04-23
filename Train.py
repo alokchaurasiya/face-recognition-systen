@@ -36,17 +36,17 @@ class train:
         b1=Button(self.root,text="Photos Data",command=self.train_classifier,cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
         b1.place(x=600,y=600,width=220,height=50)
         
-       # faces[]
-        #id[]
-        
-
+    
     def train_classifier(self):
         data_dir=("data")
         path=[os.path.join(data_dir,file) for file in os.listdir(data_dir)] 
 
+        faces=[]
+        id=[]
+
         for image in path:
-            img=Image.open(image).convert("L")
-            imageNP=np.array(img,"unit8")
+            img=Image.open(image).convert('L')
+            imageNP=np.array(img,'unit8')
             id=int(os.path.split(image)[1].split('.')[1])
 
             faces.append(imageNP)
@@ -61,10 +61,6 @@ class train:
         clf.write("classifier.xml")
         cv2.destroyAllwindows()
         messagebox.showinfo("Result","Training Dataset Completed!!")
-
-
-
-
 
 
 
