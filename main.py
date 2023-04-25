@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+import tkinter
 from PIL import Image,ImageTk
 import os
 from student import student
 from Train import train
 from face_recognition import Face_Recognition
+from help import help
 
 class face_recognisition_system:
     def __init__(self,root):
@@ -90,10 +92,10 @@ class face_recognisition_system:
         img8=img8.resize((220,220),Image.ANTIALIAS)
         self.photoimg8=ImageTk.PhotoImage(img8)
 
-        b1=Button(bg_img,image=self.photoimg8,cursor="hand2")
+        b1=Button(bg_img,image=self.photoimg8,cursor="hand2",command=self.help)
         b1.place(x=1100,y=100,width=220,height=220)
 
-        b1=Button(bg_img,text="Help Center",cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
+        b1=Button(bg_img,text="Help Center",cursor="hand2",command=self.help,font=("times new roman",15,"bold"),bg="black",fg="orange")
         b1.place(x=1100,y=300,width=220,height=30)
 
         # train face  button
@@ -134,14 +136,22 @@ class face_recognisition_system:
         img12=img12.resize((220,220),Image.ANTIALIAS)
         self.photoimg12=ImageTk.PhotoImage(img12)
 
-        b1=Button(bg_img,image=self.photoimg12,cursor="hand2")
+        b1=Button(bg_img,image=self.photoimg12,cursor="hand2",command=self.iExit)
         b1.place(x=1100,y=400,width=220,height=220)
 
-        b1=Button(bg_img,text="Exit",cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
+        b1=Button(bg_img,text="Exit",cursor="hand2",command=self.iExit,font=("times new roman",15,"bold"),bg="black",fg="orange")
         b1.place(x=1100,y=600,width=220,height=30)
 
     def open_img(self):
          os.startfile("data")
+
+    def iExit(self):
+          self.iExit=tkinter.messagebox.askyesno("Face Recognition","Are You Sure Exit The Project",parent=self.root)
+          if self.iExit>0:
+                self.root.destroy()
+          else:
+                return
+        
 
 #=====================Function Buttom====================
         
@@ -157,6 +167,10 @@ class face_recognisition_system:
     def face_data(self):
             self.new_window=Toplevel(self.root)
             self.app=Face_Recognition(self.new_window)
+
+    def help(self):
+            self.new_window=Toplevel(self.root)
+            self.app=help(self.new_window)
 
 
 

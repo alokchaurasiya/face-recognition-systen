@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image,ImageTk
 from tkinter import messagebox
-import mysql.connector
 import cv2
 import os
 import numpy as np
@@ -33,7 +32,7 @@ class train:
         b1=Button(self.root,image=self.photoimg10,cursor="hand2",command=self.train_classifier)
         b1.place(x=600,y=400,width=220,height=220)
 
-        b1=Button(self.root,text="Photos Data",command=self.train_classifier,cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
+        b1=Button(self.root,text="Photos Data",cursor="hand2",command=self.train_classifier,font=("times new roman",15,"bold"),bg="black",fg="orange")
         b1.place(x=600,y=600,width=220,height=50)
         
     
@@ -42,22 +41,22 @@ class train:
         path=[os.path.join(data_dir,file) for file in os.listdir(data_dir)] 
 
         faces=[]
-        id=[]
+        ids=[]
 
         for image in path:
             img=Image.open(image).convert('L')
-            imageNP=np.array(img,'unit8')
+            imageNP=np.array(img,'uint8')
             id=int(os.path.split(image)[1].split('.')[1])
 
             faces.append(imageNP)
-            id.append(id)
-            cv2.imshow("Training",imageNP)
+            ids.append(id)
+            cv2.imshow("Training...",imageNP)
             cv2.waitKey(1)==13
-        id=np.array(id)
+        ids=np.array(ids)
 
     #==========Train the classifier========================
         clf=cv2.face.LBPHFaceRecognizer_create()
-        clf.train(faces,id)
+        clf.train(faces,ids)
         clf.write("classifier.xml")
         cv2.destroyAllwindows()
         messagebox.showinfo("Result","Training Dataset Completed!!")

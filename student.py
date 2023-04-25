@@ -88,7 +88,7 @@ class student:
         dep_label.grid(row=0,column=0,padx=10,sticky=W)
 
         dep_combo = ttk.Combobox(left_in_frame, textvariable=self.var_dep,font=("time new raman",12,"bold"),state="readonly",width=17)
-        dep_combo["values"]=("Select Department","IT","Civil","Mechanical")
+        dep_combo["values"]=("Select Department","Information Technology","Civil","Mechanical,Computer Science")
         dep_combo.current(0) 
         dep_combo.grid(row=0,column=1,padx=2,pady=10,sticky=W)
 
@@ -97,7 +97,7 @@ class student:
         course_label.grid(row=0,column=2,padx=10,sticky=W)
 
         course_combo = ttk.Combobox(left_in_frame,textvariable=self.var_course,font=("time new raman",12,"bold"),state="readonly",width=17)
-        course_combo["values"]=("Select Course","FE","SE","TE","BE")
+        course_combo["values"]=("Select Course","MBA","BA","B.TECH","BSC","BCA","B.COM","DEPLOMA")
         course_combo.current(0) 
         course_combo.grid(row=0,column=3,padx=2,pady=10,sticky=W)
 
@@ -107,7 +107,7 @@ class student:
         year_label.grid(row=1,column=0,padx=10,sticky=W)
 
         year_combo = ttk.Combobox(left_in_frame,textvariable=self.var_year,font=("time new raman",12,"bold"),state="read",width=17)
-        year_combo["values"]=("Select Year","2020-21","2021-22","2022-23","2023-24","2024-25")
+        year_combo["values"]=("Select Year","2019-20","2020-21","2021-22","2022-23","2023-24","2024-25")
         year_combo.current(0) 
         year_combo.grid(row=1,column=1,padx=2,pady=10,sticky=W)
 
@@ -487,7 +487,7 @@ class student:
                 myresult=my_cursor.fetchall()
                 id=0
                 for x in myresult:
-                    id+1
+                    id+=1
                 my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Semester=%s,Name=%s,Division=%s,Roll=%s,Gender=%s,Dob=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,PhotoSample=%s where student_id=%s",(
                                                                                                                                                                                     self.var_dep.get(),
                                                                                                                                                                                     self.var_course.get(),
@@ -531,7 +531,7 @@ class student:
                         img_id+=1
                         face=cv2.resize(face_cropped(my_frame),(450,450))
                         face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                        file_name_path="data/user."+str(img_id)+"."+str(img_id)+".jpg"
+                        file_name_path="data/user."+str(id)+"."+str(img_id)+".jpg"
                         cv2.imwrite(file_name_path,face)
                         cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
                         cv2.imshow("Cropped Face",face)
