@@ -29,6 +29,7 @@ class help:
         dev_label.place(x=185,y=300)
 
 
+
 if __name__=="__main__":
     root=Tk()
     obj =help(root)

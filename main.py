@@ -8,6 +8,7 @@ from Train import train
 from face_recognition import Face_Recognition
 from help import help
 from attendence import Attendence
+from about import About
 
 class face_recognisition_system:
     def __init__(self,root):
@@ -126,10 +127,10 @@ class face_recognisition_system:
         img11=img11.resize((220,220),Image.ANTIALIAS)
         self.photoimg11=ImageTk.PhotoImage(img11)
 
-        b1=Button(bg_img,image=self.photoimg11,cursor="hand2")
+        b1=Button(bg_img,image=self.photoimg11,cursor="hand2",command=self.about)
         b1.place(x=800,y=400,width=220,height=220)
 
-        b1=Button(bg_img,text="About",cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
+        b1=Button(bg_img,text="About",cursor="hand2",command=self.about,font=("times new roman",15,"bold"),bg="black",fg="orange")
         b1.place(x=800,y=600,width=220,height=30)
 
         # exit  button
@@ -172,6 +173,10 @@ class face_recognisition_system:
     def attendence(self):
             self.new_window=Toplevel(self.root)
             self.app=Attendence(self.new_window)
+
+    def about(self):
+            self.new_window=Toplevel(self.root)
+            self.app=About(self.new_window)
 
     def help(self):
             self.new_window=Toplevel(self.root)
