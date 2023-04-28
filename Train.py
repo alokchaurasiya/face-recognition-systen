@@ -17,23 +17,23 @@ class train:
         title_lbl.place(x=0,y=0,width=1540,height=40)
         
         #Image
-        img_top=Image.open(r"face project inages\f17.jpg")
-        img_top=img_top.resize((1530,325),Image.ANTIALIAS)
+        img_top=Image.open(r"face project inages\f26.png")
+        img_top=img_top.resize((1550,800),Image.ANTIALIAS)
         self.photoimg_top=ImageTk.PhotoImage(img_top)
 
         f_lbl=Label(self.root,image=self.photoimg_top)
-        f_lbl.place(x=0,y=55,width=1530,height=325)
+        f_lbl.place(x=0,y=50,width=1550,height=800)
 
         #Photo Button
         img10=Image.open(r"face project inages\f18.jpg")
-        img10=img10.resize((220,220),Image.ANTIALIAS)
+        img10=img10.resize((420,420),Image.ANTIALIAS)
         self.photoimg10=ImageTk.PhotoImage(img10)
 
         b1=Button(self.root,image=self.photoimg10,cursor="hand2",command=self.train_classifier)
-        b1.place(x=600,y=400,width=220,height=220)
+        b1.place(x=950,y=200,width=420,height=420)
 
-        b1=Button(self.root,text="Photos Data",cursor="hand2",command=self.train_classifier,font=("times new roman",15,"bold"),bg="black",fg="orange")
-        b1.place(x=600,y=600,width=220,height=50)
+        b1=Button(self.root,text="Train Face",cursor="hand2",command=self.train_classifier,font=("times new roman",15,"bold"),bg="black",fg="orange")
+        b1.place(x=950,y=570,width=420,height=60)
         
     
     def train_classifier(self):
