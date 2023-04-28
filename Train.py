@@ -52,7 +52,7 @@ class train:
             ids.append(id)
             cv2.imshow("Training...",imageNP)
             cv2.waitKey(1)==13
-        ids=np.array(ids)
+        ids=np.array(ids) 
 
     #==========Train the classifier========================
         clf=cv2.face.LBPHFaceRecognizer_create()
