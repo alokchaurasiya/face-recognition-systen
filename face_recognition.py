@@ -19,8 +19,8 @@ class Face_Recognition:
         title_lbl=Label(self.root,text="FACE RECOGNITION", font=("times new roman",35,"bold"),fg="Red")
         title_lbl.place(x=0,y=0,width=1540,height=40)
 
-     #Image left
-        img_top=Image.open(r"face project inages\f3.png")
+     #Image left``
+        img_top=Image.open(r"face project inages/f3.png")
         img_top=img_top.resize((750,750),Image.ANTIALIAS)
         self.photoimg_top=ImageTk.PhotoImage(img_top)
 
@@ -60,8 +60,10 @@ class Face_Recognition:
      
     def face_recog(self):
         def draw_boundray(img,classifier,scaleFactor,minNeighbours,color,text,clf):
-            gray_image=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-            features=classifier.detectMultiScale(gray_image,scaleFactor,minNeighbours)
+            print(img)
+            img = cv2.imread(img)
+            gray_image= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            features=classifier.detectMultiScale(gray_image,scaleFactor,minNeighbours,color,text)
 
             coord=[]
 
@@ -107,17 +109,21 @@ class Face_Recognition:
             return coord
         
         def recognize(img,clf,faceCascade):
-            coord =draw_boundray(img,faceCascade,1.1,10,(255,25,255),"face",clf)
-            return img
+            scaleFactor = 1.1
+            minNeighbours = 10
+            color = (255,25,255)
+            text = "face"
+            coord =draw_boundray(img,faceCascade,scaleFactor,minNeighbours,color,text,clf)
+            return coord
         
         faceCascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
         clf=cv2.face.LBPHFaceRecognizer_create()
-        clf.read("classifier.xml")
+        clf.read("DataTrain.xml")
 
-        video_cap=cv2.VideoCapture(0)
+        video_cap=cv2.VideoCapture(3)
 
         while True:
-            ret,img=video_cap.read()
+            img=video_cap.read()
             img=recognize(img,clf,faceCascade)
             cv2.imshow("Welcome To Face Recognition",img)
 

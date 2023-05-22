@@ -88,7 +88,7 @@ class student:
         dep_label.grid(row=0,column=0,padx=10,sticky=W)
 
         dep_combo = ttk.Combobox(left_in_frame, textvariable=self.var_dep,font=("time new raman",12,"bold"),state="readonly",width=17)
-        dep_combo["values"]=("Select Department","Information Technology","Civil","Mechanical,Computer Science")
+        dep_combo["values"]=("Select Department","Information Technology","Civil","Mechanical","Computer Science")
         dep_combo.current(0) 
         dep_combo.grid(row=0,column=1,padx=2,pady=10,sticky=W)
 
