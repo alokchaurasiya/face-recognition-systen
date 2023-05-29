@@ -13,7 +13,7 @@ class About:
         title_lbl=Label(self.root,text="ABOUT", font=("times new roman",35,"bold"),bg="black",fg="orange")
         title_lbl.place(x=0,y=10,width=1540,height=40)
 
-
+        
 
 if __name__=="__main__":
     root=Tk()

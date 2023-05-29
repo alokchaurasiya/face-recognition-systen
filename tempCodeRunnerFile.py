@@ -1,2 +1,1 @@
-b1=Button(bg_img,text="Student Details",command=self.student_detail,cursor="hand2",font=("times new roman",15,"bold"),bg="black",fg="orange")
-        b1.place(x=200,y=300,width=220,height=30)
+cv2.putText(img,f"ID:{i}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)

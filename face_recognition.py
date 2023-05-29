@@ -60,15 +60,13 @@ class Face_Recognition:
      
     def face_recog(self):
         def draw_boundray(img,classifier,scaleFactor,minNeighbours,color,text,clf):
-            print(img)
-            img = cv2.imread(img)
             gray_image= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            features=classifier.detectMultiScale(gray_image,scaleFactor,minNeighbours,color,text)
+            features=classifier.detectMultiScale(gray_image,scaleFactor,minNeighbours)
 
             coord=[]
 
             for (x,y,w,h) in features:
-                cv2.rectangle(img(x,y),(x+w,y+h),(0,255,0),3)
+                cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),3)
                 id,predict=clf.predict(gray_image[y:y+h,x:x+w])
                 confidence=int((100*(1-predict/300)))
 
@@ -83,10 +81,6 @@ class Face_Recognition:
                 r=my_cursor.fetchone()
                 r="+".join(r)
 
-                my_cursor.execute("select Dob from student where Student_id="+str(id))
-                d=my_cursor.fetchone()
-                d="+".join(d)
-
                 my_cursor.execute("select student_id from student where Student_id="+str(id))
                 i=my_cursor.fetchone()
                 i="+".join(i)
@@ -95,42 +89,36 @@ class Face_Recognition:
 
 
                 if confidence>77:
-                    cv2.putText(img,f"ID:{i}",(x,y-75),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
-                    cv2.putText(img,f"Roll:{r}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
-                    cv2.putText(img,f"Name:{n}",(x,y-30),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
-                    cv2.putText(img,f"DOB:{d}",(x,y-15),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
-                    self.mark_attendance(i,r,n,d)
+                    cv2.putText(img,f"ID:{i}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
+                    cv2.putText(img,f"Roll:{r}",(x,y-30),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
+                    cv2.putText(img,f"Name:{n}",(x,y-20),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                 else:
                     cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),3)
                     cv2.putText(img,"Unknown Face",(x,y-15),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
 
-                    coord=[x,y,w,h]
+                coord=[x,y,w,y]
 
             return coord
         
         def recognize(img,clf,faceCascade):
-            scaleFactor = 1.1
-            minNeighbours = 10
-            color = (255,25,255)
-            text = "face"
-            coord =draw_boundray(img,faceCascade,scaleFactor,minNeighbours,color,text,clf)
-            return coord
+            coord =draw_boundray(img,faceCascade,1.1,10,(255,25,255),"Face",clf)
+            return img
         
         faceCascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
         clf=cv2.face.LBPHFaceRecognizer_create()
         clf.read("DataTrain.xml")
 
-        video_cap=cv2.VideoCapture(3)
+        video_cap=cv2.VideoCapture(0)
 
         while True:
-            img=video_cap.read()
+            ret,img=video_cap.read()
             img=recognize(img,clf,faceCascade)
             cv2.imshow("Welcome To Face Recognition",img)
 
             if cv2.waitKey(1)==13:
                 break
-            video_cap.release()
-            cv2.destroyAllWindows()
+        video_cap.release()
+        cv2.destroyAllWindows()
 
 
 
